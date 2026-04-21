@@ -454,19 +454,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000010224391686, guid: e74b56ca326704bd19eabbb585d06ba2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.06
+      value: -1.0828705
       objectReference: {fileID: 0}
     - target: {fileID: 4000010224391686, guid: e74b56ca326704bd19eabbb585d06ba2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.28549713
+      value: -0.1116613
       objectReference: {fileID: 0}
     - target: {fileID: 4000010224391686, guid: e74b56ca326704bd19eabbb585d06ba2, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9984149
+      value: 0.9997607
       objectReference: {fileID: 0}
     - target: {fileID: 4000010224391686, guid: e74b56ca326704bd19eabbb585d06ba2, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.056282613
+      value: 0.021876216
       objectReference: {fileID: 0}
     - target: {fileID: 4000010224391686, guid: e74b56ca326704bd19eabbb585d06ba2, type: 3}
       propertyPath: m_LocalRotation.y
@@ -478,7 +478,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000010224391686, guid: e74b56ca326704bd19eabbb585d06ba2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 6.453
+      value: 2.507
       objectReference: {fileID: 0}
     - target: {fileID: 4000010224391686, guid: e74b56ca326704bd19eabbb585d06ba2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -679,6 +679,18 @@ PrefabInstance:
     - target: {fileID: 1000012396500830, guid: cb4a0e40b07644ed0a914752c0f03670, type: 3}
       propertyPath: m_Name
       value: redzombie
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012112653554, guid: cb4a0e40b07644ed0a914752c0f03670, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012112653554, guid: cb4a0e40b07644ed0a914752c0f03670, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012112653554, guid: cb4a0e40b07644ed0a914752c0f03670, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4000012112653554, guid: cb4a0e40b07644ed0a914752c0f03670, type: 3}
       propertyPath: m_LocalPosition.x
@@ -948,12 +960,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9665c76278b3364caf78c3dc694de8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  selectedZombie: {fileID: 941987962}
   zombies:
   - {fileID: 831596843}
   - {fileID: 941987962}
   - {fileID: 810516261}
   - {fileID: 79368369}
+  selectedZombie: {fileID: 831596843}
+  selectedScale: {x: 1.3, y: 1.3, z: 1.3}
+  pushForce: {x: 1, y: 1, z: 1}
 --- !u!4 &1981454077
 Transform:
   m_ObjectHideFlags: 0
