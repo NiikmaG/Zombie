@@ -13,12 +13,13 @@ public class Collectible : MonoBehaviour
     public float floatHeight = 0.2f;
     public float floatSpeed = 2f;
 
-    private Vector3 baseScale;
+    private Vector3 startScale;
     private float timer;
+    private bool pickedUp;
 
     void Awake()
     {
-        baseScale = transform.localScale;
+        startScale = transform.localScale;
 
         Rigidbody rb = GetComponent<Rigidbody>();
 
@@ -38,7 +39,7 @@ public class Collectible : MonoBehaviour
 
     void LateUpdate()
     {
-        if (followPoint == null)
+        if (followPoint == null || pickedUp)
             return;
 
         timer += Time.deltaTime;
@@ -51,23 +52,22 @@ public class Collectible : MonoBehaviour
         transform.position = followPoint.position + followPoint.up * (height + extraHeight);
 
         if (rotate)
-        {
             transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.Self);
-        }
-        else
-        {
-            transform.rotation = followPoint.rotation;
-        }
 
-        transform.localScale = baseScale;
+        transform.localScale = startScale;
     }
 
     void OnTriggerEnter(Collider other)
     {
+        if (pickedUp)
+            return;
+
         ZombieMarker zombie = other.GetComponentInParent<ZombieMarker>();
 
         if (zombie == null)
             return;
+
+        pickedUp = true;
 
         if (game != null)
             game.TakeCollectible();

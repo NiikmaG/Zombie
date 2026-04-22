@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text messageText;
     public TMP_Text resultText;
     public GameObject endPanel;
+    public GameObject pausePanel;
 
     private GameObject currentZombie;
     private GameObject currentCollectible;
@@ -37,6 +39,7 @@ public class GameManager : MonoBehaviour
 
     private bool gameEnded;
     private bool rightDoorOpen;
+    private bool gamePaused;
 
     void Start()
     {
@@ -46,6 +49,9 @@ public class GameManager : MonoBehaviour
 
         if (endPanel != null)
             endPanel.SetActive(false);
+
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
 
         if (rightDoorBlocker != null)
             rightDoorBlocker.SetActive(true);
@@ -60,7 +66,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (gameEnded)
+        CheckPauseInput();
+
+        if (gameEnded || gamePaused)
             return;
 
         timer += Time.deltaTime;
@@ -68,6 +76,47 @@ public class GameManager : MonoBehaviour
 
         if (currentZombie != null && currentZombie.transform.position.y < fallY)
             LoseZombie();
+    }
+
+    void CheckPauseInput()
+    {
+        if (gameEnded)
+            return;
+
+        if (Keyboard.current == null)
+            return;
+
+        if (Keyboard.current.escapeKey.wasPressedThisFrame || Keyboard.current.pKey.wasPressedThisFrame)
+            TogglePause();
+    }
+
+    public void TogglePause()
+    {
+        if (gamePaused)
+            ResumeGame();
+        else
+            PauseGame();
+    }
+
+    public void PauseGame()
+    {
+        if (gameEnded)
+            return;
+
+        gamePaused = true;
+        Time.timeScale = 0f;
+
+        if (pausePanel != null)
+            pausePanel.SetActive(true);
+    }
+
+    public void ResumeGame()
+    {
+        gamePaused = false;
+        Time.timeScale = 1f;
+
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
     }
 
     void LoadCollectiblePoints()
@@ -138,11 +187,14 @@ public class GameManager : MonoBehaviour
 
     public void TakeCollectible()
     {
-        if (gameEnded || rightDoorOpen)
+        if (gameEnded || gamePaused || rightDoorOpen)
             return;
 
         if (currentCollectible == null)
             return;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayCollectibleSound();
 
         GameObject collectedObject = currentCollectible;
         currentCollectible = null;
@@ -172,7 +224,7 @@ public class GameManager : MonoBehaviour
 
     public void TryRightDoor()
     {
-        if (gameEnded)
+        if (gameEnded || gamePaused)
             return;
 
         if (!rightDoorOpen)
@@ -188,7 +240,7 @@ public class GameManager : MonoBehaviour
 
     public void WrongDoor()
     {
-        if (gameEnded)
+        if (gameEnded || gamePaused)
             return;
 
         LoseZombie();
@@ -198,6 +250,9 @@ public class GameManager : MonoBehaviour
     {
         if (currentZombie == null)
             return;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayZombieDeathSound();
 
         GameObject lostZombie = currentZombie;
         currentZombie = null;
@@ -220,12 +275,25 @@ public class GameManager : MonoBehaviour
     void EndGame(string result)
     {
         gameEnded = true;
+        gamePaused = false;
+
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
 
         if (resultText != null)
             resultText.text = result;
 
         if (endPanel != null)
             endPanel.SetActive(true);
+
+        if (AudioManager.Instance != null)
+        {
+            if (result == "You win")
+                AudioManager.Instance.PlayWinSound();
+
+            if (result == "You lose")
+                AudioManager.Instance.PlayLoseSound();
+        }
 
         Time.timeScale = 0f;
     }
